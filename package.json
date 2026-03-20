@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@heroui/react": "^2.8.10",
+    "@monaco-editor/react": "^4.7.0",
     "@tailwindcss/vite": "^4.2.2",
     "framer-motion": "^12.38.0",
     "react": "^19.2.4",
