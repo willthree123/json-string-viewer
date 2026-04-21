@@ -152,6 +152,36 @@ function App() {
     [pushHistory],
   );
 
+  const removePersistenceKeys = (value: unknown): unknown => {
+    if (Array.isArray(value)) return value.map(removePersistenceKeys);
+    if (value !== null && typeof value === "object") {
+      return Object.fromEntries(
+        Object.entries(value as Record<string, unknown>)
+          .filter(([k]) => !/^persistence/i.test(k))
+          .map(([k, v]) => [k, removePersistenceKeys(v)]),
+      );
+    }
+    return value;
+  };
+
+  const handleRemovePersistence = useCallback(() => {
+    if (!jsonValue.trim()) return;
+    try {
+      const obj = JSON.parse(jsonValue);
+      const cleaned = removePersistenceKeys(obj);
+      const pretty = JSON.stringify(cleaned, null, 2);
+      const doubleStringified = JSON.stringify(JSON.stringify(cleaned));
+      setJsonValue(pretty);
+      setStringValue(doubleStringified);
+      setJsonError(null);
+      setStringError(null);
+      saveStorage(doubleStringified, pretty);
+      pushHistory({ string: doubleStringified, json: pretty });
+    } catch {
+      // ignore if JSON is currently invalid
+    }
+  }, [jsonValue, pushHistory]);
+
   const handleClear = useCallback(() => {
     setStringValue("");
     setJsonValue("");
@@ -238,6 +268,11 @@ function App() {
             <Tooltip content="Redo (Ctrl+Shift+Z)" placement="bottom">
               <Button variant="flat" color="default" size="sm" isDisabled={!canRedo} onPress={redo}>
                 Redo
+              </Button>
+            </Tooltip>
+            <Tooltip content="Remove all persistence* keys from JSON" placement="bottom">
+              <Button variant="flat" color="warning" size="sm" isDisabled={!jsonValue || !!jsonError} onPress={handleRemovePersistence}>
+                Remove Persistence
               </Button>
             </Tooltip>
             <Button variant="flat" color="default" size="sm" onPress={handleClear}>
