@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef } from "react";
+import { Link } from "react-router-dom";
 import Editor, { type OnMount } from "@monaco-editor/react";
 import { Card, CardBody, CardHeader, Chip, Divider, Button, Tooltip } from "@heroui/react";
 
@@ -278,6 +279,11 @@ function App() {
             <Button variant="flat" color="default" size="sm" onPress={handleClear}>
               Clear
             </Button>
+            <Link to="/sql">
+              <Button variant="flat" color="primary" size="sm">
+                SQL →
+              </Button>
+            </Link>
           </div>
         </div>
 
