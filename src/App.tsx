@@ -279,6 +279,11 @@ function App() {
             <Button variant="flat" color="default" size="sm" onPress={handleClear}>
               Clear
             </Button>
+            <Link to="/scan-json">
+              <Button variant="flat" color="secondary" size="sm">
+                Scan JSON →
+              </Button>
+            </Link>
             <Link to="/sql">
               <Button variant="flat" color="primary" size="sm">
                 SQL →
